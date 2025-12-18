@@ -7,14 +7,6 @@ use crate::level::get_valid_spawn_positions;
 #[derive(Component)]
 pub struct Target;
 
-pub struct TargetPlugin;
-
-impl Plugin for TargetPlugin {
-    fn build(&self, app: &mut App) {
-        app.add_systems(Update, cleanup_targets_on_menu);
-    }
-}
-
 pub fn spawn_target(commands: &mut Commands, player_query: &Query<&Transform, With<crate::player::Player>>) {
     use rand::Rng;
     let mut rng = rand::rng();
@@ -45,14 +37,3 @@ pub fn spawn_target(commands: &mut Commands, player_query: &Query<&Transform, Wi
     ));
 }
 
-fn cleanup_targets_on_menu(
-    mut commands: Commands,
-    game: Res<crate::game::Game>,
-    query: Query<Entity, With<Target>>,
-) {
-    if game.state == crate::game::GameState::Menu {
-        for entity in query.iter() {
-            commands.entity(entity).despawn();
-        }
-    }
-}

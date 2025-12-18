@@ -17,7 +17,6 @@ use game::GamePlugin;
 use level::LevelPlugin;
 use player::PlayerPlugin;
 use projectile::ProjectilePlugin;
-use target::TargetPlugin;
 use ui::UIPlugin;
 
 fn main() {
@@ -37,7 +36,6 @@ fn main() {
             LevelPlugin,
             PlayerPlugin,
             ProjectilePlugin,
-            TargetPlugin,
             UIPlugin,
             CollisionPlugin,
         ))

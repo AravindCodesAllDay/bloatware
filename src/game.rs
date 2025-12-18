@@ -44,39 +44,37 @@ fn handle_state_transitions(
     mut commands: Commands,
     input: Res<ButtonInput<KeyCode>>,
     mut game: ResMut<Game>,
-    player_query: Query<(Entity, &Transform), With<crate::player::Player>>,
-    player_transform_query: Query<&Transform, With<crate::player::Player>>,
+    player_query: Query<Entity, With<crate::player::Player>>,
     target_query: Query<Entity, With<crate::target::Target>>,
     projectile_query: Query<Entity, With<crate::projectile::Projectile>>,
+    player_transform_query: Query<&Transform, With<crate::player::Player>>,
 ) {
-    if input.just_pressed(KeyCode::Space) {
-        match game.state {
-            GameState::Menu => {
-                game.state = GameState::Playing;
-                game.score = 0;
-                game.timer = 0.0;
-                crate::player::spawn_player(&mut commands);
-                crate::target::spawn_target(&mut commands, &player_transform_query);
-            }
-            GameState::GameOver => {
-                // Clean up
-                for (entity, _) in player_query.iter() {
-                    commands.entity(entity).despawn();
-                }
-                for entity in target_query.iter() {
-                    commands.entity(entity).despawn();
-                }
-                for entity in projectile_query.iter() {
-                    commands.entity(entity).despawn();
-                }
+    if !input.just_pressed(KeyCode::Space) {
+        return;
+    }
 
-                game.state = GameState::Playing;
-                game.score = 0;
-                game.timer = 0.0;
-                crate::player::spawn_player(&mut commands);
-                crate::target::spawn_target(&mut commands, &player_transform_query);
+    match game.state {
+        GameState::Menu | GameState::GameOver => {
+            // ---- CLEAN UP ----
+            for e in player_query.iter() {
+                commands.entity(e).despawn();
             }
-            _ => {}
+            for e in target_query.iter() {
+                commands.entity(e).despawn();
+            }
+            for e in projectile_query.iter() {
+                commands.entity(e).despawn();
+            }
+
+            // ---- RESET GAME ----
+            game.state = GameState::Playing;
+            game.score = 0;
+            game.timer = 0.0;
+
+            // ---- SPAWN ----
+            crate::player::spawn_player(&mut commands);
+            crate::target::spawn_target(&mut commands, &player_transform_query);
         }
+        _ => {}
     }
 }
