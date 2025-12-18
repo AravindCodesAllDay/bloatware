@@ -1,0 +1,30 @@
+[package]
+name = "bloatware"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bevy = { version = "0.17.3", features = ["dynamic_linking"] }
+rand = "0.9.2"
+serde = { version="1.0.228", features = ["derive"] }
+serde_json = "1.0.145"
+
+# Fast compile times for development
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
+
+# Maximum performance for release
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = true
+
+# Alternative fast-compile profile (use with --profile fast)
+[profile.fast]
+inherits = "release"
+lto = false
+codegen-units = 16
+opt-level = 2
