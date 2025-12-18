@@ -15,7 +15,6 @@ pub struct Player {
     pub dash_direction: Vec3,
     pub dash_start_pos: Vec3,
     pub step_timer: f32,
-    pub velocity: Vec3,  
 }
 
 #[derive(Component)]
@@ -29,7 +28,7 @@ pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Update, (
-            player_input,
+            player_movement,
             dash_handler,
             update_player_visuals,
         ));
@@ -53,7 +52,6 @@ pub fn spawn_player(commands: &mut Commands) {
             dash_direction: Vec3::ZERO,
             dash_start_pos: Vec3::ZERO,
             step_timer: 0.0,
-            velocity: Vec3::ZERO,
         },
     ))
     .with_children(|parent| {
@@ -88,11 +86,11 @@ pub fn spawn_player(commands: &mut Commands) {
     });
 }
 
-fn player_input(
+fn player_movement(
     mut commands: Commands,
     time: Res<Time>,
     input: Res<ButtonInput<KeyCode>>,
-    mut query: Query<(&Transform, &mut Player)>,
+    mut query: Query<(&mut Transform, &mut Player)>,
     assets: Res<GameAssets>,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
@@ -102,10 +100,9 @@ fn player_input(
         return;
     }
 
-    let Ok((transform, mut player)) = query.single_mut() else { return };
+    let Ok((mut transform, mut player)) = query.single_mut() else { return };
 
     if player.is_dashing {
-        player.velocity = Vec3::ZERO;
         return;
     }
 
@@ -129,7 +126,7 @@ fn player_input(
     if dir != Vec3::ZERO {
         dir = dir.normalize();
         player.last_direction = dir;
-        player.velocity = dir * PLAYER_SPEED;
+        transform.translation += dir * PLAYER_SPEED * time.delta_secs();
 
         player.step_timer -= time.delta_secs();
         if player.step_timer <= 0.0 {
@@ -137,7 +134,6 @@ fn player_input(
             player.step_timer = STEP_INTERVAL;
         }
     } else {
-        player.velocity = Vec3::ZERO;
         player.step_timer = STEP_INTERVAL;
     }
 

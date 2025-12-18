@@ -8,7 +8,7 @@ mod game;
 mod level;
 mod player;
 mod projectile;
-mod enemy;
+mod target;
 mod ui;
 
 use audio::AudioPlugin;
@@ -17,7 +17,6 @@ use game::GamePlugin;
 use level::LevelPlugin;
 use player::PlayerPlugin;
 use projectile::ProjectilePlugin;
-use enemy::EnemyPlugin;
 use ui::UIPlugin;
 
 fn main() {
@@ -36,7 +35,6 @@ fn main() {
             AudioPlugin,
             LevelPlugin,
             PlayerPlugin,
-            EnemyPlugin,  
             ProjectilePlugin,
             UIPlugin,
             CollisionPlugin,

@@ -45,7 +45,7 @@ fn handle_state_transitions(
     input: Res<ButtonInput<KeyCode>>,
     mut game: ResMut<Game>,
     player_query: Query<Entity, With<crate::player::Player>>,
-    enemy_query: Query<Entity, With<crate::enemy::Enemy>>,
+    target_query: Query<Entity, With<crate::target::Target>>,
     projectile_query: Query<Entity, With<crate::projectile::Projectile>>,
     player_transform_query: Query<&Transform, With<crate::player::Player>>,
 ) {
@@ -59,7 +59,7 @@ fn handle_state_transitions(
             for e in player_query.iter() {
                 commands.entity(e).despawn();
             }
-            for e in enemy_query.iter() {
+            for e in target_query.iter() {
                 commands.entity(e).despawn();
             }
             for e in projectile_query.iter() {
@@ -73,7 +73,7 @@ fn handle_state_transitions(
 
             // ---- SPAWN ----
             crate::player::spawn_player(&mut commands);
-            crate::enemy::spawn_enemy(&mut commands, &player_transform_query);
+            crate::target::spawn_target(&mut commands, &player_transform_query);
         }
         _ => {}
     }
