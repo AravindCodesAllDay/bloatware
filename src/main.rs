@@ -5,7 +5,7 @@ mod audio;
 mod collision;
 mod constants;
 mod game;
-mod level;
+mod chunk;
 mod player;
 mod projectile;
 mod enemy;
@@ -14,7 +14,7 @@ mod ui;
 use audio::AudioPlugin;
 use collision::CollisionPlugin;
 use game::GamePlugin;
-use level::LevelPlugin;
+use chunk::ChunkPlugin;
 use player::PlayerPlugin;
 use projectile::ProjectilePlugin;
 use enemy::EnemyPlugin;
@@ -34,9 +34,9 @@ fn main() {
         .add_plugins((
             GamePlugin,
             AudioPlugin,
-            LevelPlugin,
+            ChunkPlugin,  // Chunk system instead of LevelPlugin
             PlayerPlugin,
-            EnemyPlugin,  
+            EnemyPlugin,
             ProjectilePlugin,
             UIPlugin,
             CollisionPlugin,

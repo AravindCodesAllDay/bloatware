@@ -4,7 +4,7 @@ use bevy::prelude::*;
 use crate::audio::GameAssets;
 use crate::constants::*;
 use crate::game::{Game, GameState};
-use crate::level::Wall;
+use crate::chunk::{ChunkWall, ChunkEnemy};
 use crate::player::Player;
 use crate::projectile::Projectile;
 use crate::enemy::Enemy;
@@ -14,8 +14,8 @@ pub struct CollisionPlugin;
 impl Plugin for CollisionPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Update, (
-            apply_player_movement,      
-            apply_enemy_movement,        
+            apply_player_movement,
+            apply_enemy_movement,
             check_projectile_wall_collision,
             check_projectile_enemy_collision,
             check_player_enemy_collision,
@@ -26,7 +26,7 @@ impl Plugin for CollisionPlugin {
 fn apply_player_movement(
     time: Res<Time>,
     mut player_q: Query<(&mut Transform, &Player)>,
-    wall_q: Query<(&Transform, &Sprite), (With<Wall>, Without<Player>)>,
+    wall_q: Query<(&Transform, &Sprite), (With<ChunkWall>, Without<Player>)>,
     game: Res<Game>,
 ) {
     if game.state != GameState::Playing {
@@ -35,7 +35,6 @@ fn apply_player_movement(
 
     let Ok((mut p_t, p)) = player_q.single_mut() else { return };
     
-    // Skip if dashing (dash_handler controls position)
     if p.is_dashing {
         return;
     }
@@ -44,11 +43,9 @@ fn apply_player_movement(
         return;
     }
 
-    // 1. Calculate tentative position
     let tentative_pos = p_t.translation + p.velocity * time.delta_secs();
     let p_rad = PLAYER_SIZE / 2.0;
 
-    // 2. Resolve collisions
     let mut final_pos = tentative_pos;
 
     for (w_t, w_s) in wall_q.iter() {
@@ -63,7 +60,6 @@ fn apply_player_movement(
             let ox = (p_rad + w_half.x) - dx;
             let oy = (p_rad + w_half.y) - dy;
 
-            // Push out of wall on the axis with smallest overlap
             if ox < oy {
                 final_pos.x += if final_pos.x < w_pos.x { -ox } else { ox };
             } else {
@@ -72,14 +68,13 @@ fn apply_player_movement(
         }
     }
 
-    // 3. Apply final position
     p_t.translation = final_pos;
 }
 
 fn apply_enemy_movement(
     time: Res<Time>,
     mut enemy_q: Query<(&mut Transform, &Enemy)>,
-    wall_q: Query<(&Transform, &Sprite), (With<Wall>, Without<Enemy>)>,
+    wall_q: Query<(&Transform, &Sprite), (With<ChunkWall>, Without<Enemy>)>,
     game: Res<Game>,
 ) {
     if game.state != GameState::Playing {
@@ -91,11 +86,9 @@ fn apply_enemy_movement(
             continue;
         }
 
-        // 1. Calculate tentative position
         let tentative_pos = e_t.translation + enemy.velocity * time.delta_secs();
         let e_half = ENEMY_SIZE / 2.0;
 
-        // 2. Resolve collisions
         let mut final_pos = tentative_pos;
 
         for (w_t, w_s) in wall_q.iter() {
@@ -118,7 +111,6 @@ fn apply_enemy_movement(
             }
         }
 
-        // 3. Apply final position
         e_t.translation = final_pos;
     }
 }
@@ -127,8 +119,13 @@ fn check_projectile_wall_collision(
     mut commands: Commands,
     assets: Res<GameAssets>,
     proj_q: Query<(Entity, &Transform), With<Projectile>>,
-    wall_q: Query<(&Transform, &Sprite), With<Wall>>,
+    wall_q: Query<(&Transform, &Sprite), With<ChunkWall>>,
+    game: Res<Game>,
 ) {
+    if game.state != GameState::Playing {
+        return;
+    }
+
     for (p_e, p_t) in proj_q.iter() {
         let p_pos = p_t.translation;
         let p_rad = PROJECTILE_RADIUS;
@@ -154,8 +151,7 @@ fn check_projectile_enemy_collision(
     mut commands: Commands,
     assets: Res<GameAssets>,
     proj_q: Query<(Entity, &Transform), With<Projectile>>,
-    enemy_q: Query<(Entity, &Transform), With<Enemy>>,
-    player_q: Query<&Transform, With<Player>>,
+    enemy_q: Query<(Entity, &Transform, &ChunkEnemy), With<Enemy>>,
     mut game: ResMut<Game>,
 ) {
     if game.state != GameState::Playing {
@@ -166,21 +162,20 @@ fn check_projectile_enemy_collision(
         let p_pos = p_t.translation;
         let p_rad = PROJECTILE_RADIUS;
 
-        for (t_e, t_t) in enemy_q.iter() {
-            let t_pos = t_t.translation;
-            let t_half = ENEMY_SIZE / 2.0;
+        for (e_e, e_t, _chunk_enemy) in enemy_q.iter() {
+            let e_pos = e_t.translation;
+            let e_half = ENEMY_SIZE / 2.0;
 
-            let dx = (p_pos.x - t_pos.x).abs();
-            let dy = (p_pos.y - t_pos.y).abs();
+            let dx = (p_pos.x - e_pos.x).abs();
+            let dy = (p_pos.y - e_pos.y).abs();
 
-            if dx < (p_rad + t_half) && dy < (p_rad + t_half) {
+            if dx < (p_rad + e_half) && dy < (p_rad + e_half) {
                 commands.entity(p_e).despawn();
-                commands.entity(t_e).despawn();
+                commands.entity(e_e).despawn();
 
                 game.score += 1;
 
                 commands.spawn(AudioPlayer(assets.hit.clone()));
-                crate::enemy::spawn_enemy(&mut commands, &player_q);
 
                 break;
             }
@@ -201,15 +196,15 @@ fn check_player_enemy_collision(
 
     for enemy_t in enemy_q.iter() {
         let p_pos = player_t.translation;
-        let t_pos = enemy_t.translation;
+        let e_pos = enemy_t.translation;
 
         let p_half = PLAYER_SIZE / 2.0;
-        let t_half = ENEMY_SIZE / 2.0;
+        let e_half = ENEMY_SIZE / 2.0;
 
-        let dx = (p_pos.x - t_pos.x).abs();
-        let dy = (p_pos.y - t_pos.y).abs();
+        let dx = (p_pos.x - e_pos.x).abs();
+        let dy = (p_pos.y - e_pos.y).abs();
 
-        if dx < (p_half + t_half) && dy < (p_half + t_half) {
+        if dx < (p_half + e_half) && dy < (p_half + e_half) {
             game.state = GameState::GameOver;
             break;
         }

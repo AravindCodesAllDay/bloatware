@@ -40,7 +40,13 @@ fn update_ui(game: Res<Game>, mut query: Query<&mut Text, With<UIText>>) {
             }
             GameState::Playing => {
                 text.0 = format!(
-                    "Score: {}\nTime: {:02}:{:02}.{:02}",
+                    "Score: {}\nTime: {:02}:{:02}.{:02}\n\nESC to Pause",
+                    game.score, minutes, seconds, millis
+                );
+            }
+            GameState::Paused => {
+                text.0 = format!(
+                    "PAUSED\n\nScore: {}\nTime: {:02}:{:02}.{:02}\n\nPress ESC to Resume",
                     game.score, minutes, seconds, millis
                 );
             }
