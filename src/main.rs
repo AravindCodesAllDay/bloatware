@@ -1,5 +1,5 @@
 // main.rs
-use bevy::prelude::*;
+use bevy::prelude::{App, DefaultPlugins, PluginGroup, Window, WindowPlugin};
 
 mod audio;
 mod common;

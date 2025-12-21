@@ -1,7 +1,9 @@
 // ============================================================================
 // projectile.rs
-use bevy::prelude::*;
-use crate::common::constants::*;
+use bevy::prelude::{
+    App, Commands, Component, Entity, Plugin, Query, Res, Time, Transform, Update, Vec3,
+};
+use crate::common::constants::{PROJECTILE_MAX_DISTANCE, PROJECTILE_SPEED};
 use crate::game::{Game, GameState};
 
 #[derive(Component)]

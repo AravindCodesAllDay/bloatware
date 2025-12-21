@@ -1,9 +1,17 @@
 // ============================================================================
 // player.rs
-use bevy::prelude::*;
+use bevy::prelude::{
+    App, Assets, AudioPlayer, ButtonInput, Children, ColorMaterial, Commands, Component, KeyCode,
+    Mesh, Mesh2d, MeshMaterial2d, Plugin, Query, Res, ResMut, Time, Transform, Update, Vec2, Vec3,
+    With, Without, Circle, Sprite,
+};
 use crate::audio::GameAssets;
-use crate::common::constants::*;
+use crate::common::constants::{
+    DASH_COOLDOWN, DASH_DISTANCE, DASH_DURATION, GUN_EMPTY, GUN_READY, PLAYER_EMPTY, PLAYER_READY,
+    PLAYER_SIZE, PLAYER_SPEED, PROJECTILE_COLOR, PROJECTILE_RADIUS, SHOOT_COOLDOWN, STEP_INTERVAL,
+};
 use crate::game::{Game, GameState};
+use crate::projectile::Projectile;
 
 #[derive(Component)]
 pub struct Player {
@@ -160,7 +168,7 @@ fn player_input(
             Mesh2d(meshes.add(Circle::new(PROJECTILE_RADIUS))),
             MeshMaterial2d(materials.add(ColorMaterial::from(PROJECTILE_COLOR))),
             Transform::from_translation(transform.translation),
-            crate::projectile::Projectile {
+            Projectile {
                 direction: shoot_dir,
                 distance_traveled: 0.0,
             },
@@ -211,7 +219,7 @@ fn update_player_visuals(
     let Ok((player, children)) = player_query.single() else { return };
 
     for child in children.iter() {
-        if let Ok((mut dash_sprite, mut dash_transform)) = dash_fill_query.get_mut(child) {
+        if let Ok((mut dash_sprite, mut dash_transform)) = dash_fill_query.get_mut(*child) {
             let fill_ratio = if player.dash_cooldown > 0.0 {
                 1.0 - (player.dash_cooldown / DASH_COOLDOWN).clamp(0.0, 1.0)
             } else {
@@ -222,7 +230,7 @@ fn update_player_visuals(
             dash_transform.translation.y = (new_height - PLAYER_SIZE) / 2.0;
         }
 
-        if let Ok((mut gun_sprite, mut gun_transform)) = gun_query.get_mut(child) {
+        if let Ok((mut gun_sprite, mut gun_transform)) = gun_query.get_mut(*child) {
             let fill_ratio = if player.shoot_cooldown > 0.0 {
                 1.0 - (player.shoot_cooldown / SHOOT_COOLDOWN).clamp(0.0, 1.0)
             } else {

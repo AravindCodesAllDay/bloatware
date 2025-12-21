@@ -1,6 +1,9 @@
 // ============================================================================
 // ui.rs
-use bevy::prelude::*;
+use bevy::prelude::{
+    App, Commands, Component, Node, Plugin, PositionType, Query, Res, Startup, Text, Update, Val,
+    With, default,
+};
 use crate::game::{Game, GameState};
 
 #[derive(Component)]

@@ -1,8 +1,10 @@
 // ============================================================================
 // enemy.rs
-use bevy::prelude::*;
-use crate::common::constants::*;
+use bevy::prelude::{App, Component, Plugin, Query, Res, Time, Transform, Update, Vec3, With, Sprite};
+use crate::common::constants::{ENEMY_SIZE, ENEMY_SPEED, ENEMY_TRACK_RANGE, TILE_SIZE};
 use crate::game::{Game, GameState};
+use crate::player::Player;
+use crate::world::chunk::ChunkWall;
 
 #[derive(Component)]
 pub struct Enemy {
@@ -22,8 +24,8 @@ impl Plugin for EnemyPlugin {
 fn enemy_ai(
     time: Res<Time>,
     mut enemy_q: Query<(&Transform, &mut Enemy)>,
-    player_q: Query<&Transform, With<crate::player::Player>>,
-    wall_q: Query<(&Transform, &Sprite), With<crate::world::chunk::ChunkWall>>,
+    player_q: Query<&Transform, With<Player>>,
+    wall_q: Query<(&Transform, &Sprite), With<ChunkWall>>,
     game: Res<Game>,
 ) {
     if game.state != GameState::Playing {

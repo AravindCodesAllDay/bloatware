@@ -1,10 +1,18 @@
 // ============================================================================
 // chunk.rs
-use bevy::prelude::*;
+use bevy::prelude::{
+    App, Commands, Component, Entity, Plugin, Query, Res, ResMut, Resource, Transform, Update, Vec2,
+    Vec3, With, Sprite,
+};
+use crate::enemy::Enemy;
+use crate::player::Player;
 use std::collections::{HashMap, HashSet};
 use rand::{Rng, SeedableRng};
 use rand::rngs::StdRng;
-use crate::common::constants::*;
+use crate::common::constants::{
+    CHUNK_LOAD_RADIUS, CHUNK_SIZE, CHUNK_UNLOAD_BUFFER, ENEMY_COLOR, ENEMY_SIZE,
+    MAX_ENEMIES_PER_CHUNK, MIN_ENEMIES_PER_CHUNK, TILE_SIZE, WALL_COLOR, WALL_DENSITY,
+};
 use crate::game::{Game, GameState};
 
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
@@ -71,7 +79,7 @@ impl Plugin for ChunkPlugin {
 fn update_chunks(
     mut commands: Commands,
     mut world_gen: ResMut<WorldGen>,
-    player_query: Query<&Transform, With<crate::player::Player>>,
+    player_query: Query<&Transform, With<Player>>,
     game: Res<Game>,
 ) {
     if game.state != GameState::Playing {
@@ -161,7 +169,7 @@ fn generate_chunk(
                     ..Default::default()
                 },
                 Transform::from_translation(spawn_pos),
-                crate::enemy::Enemy {
+                Enemy {
                     velocity: Vec3::ZERO,
                     chosen_direction: Vec3::ZERO,
                     path_timer: 0.0,
@@ -181,7 +189,7 @@ fn generate_chunk(
 fn cleanup_far_chunks(
     mut commands: Commands,
     mut world_gen: ResMut<WorldGen>,
-    player_query: Query<&Transform, With<crate::player::Player>>,
+    player_query: Query<&Transform, With<Player>>,
     game: Res<Game>,
 ) {
     if game.state != GameState::Playing {

@@ -1,8 +1,11 @@
 // ============================================================================
 // collision.rs
-use bevy::prelude::*;
+use bevy::prelude::{
+    App, AudioPlayer, Commands, Entity, Plugin, Query, Res, ResMut, Time, Transform, Update, Vec3, With,
+    Without, Sprite,
+};
 use crate::audio::GameAssets;
-use crate::common::constants::*;
+use crate::common::constants::{ENEMY_SIZE, PLAYER_SIZE, PROJECTILE_RADIUS};
 use crate::game::{Game, GameState};
 use crate::world::chunk::{ChunkWall, ChunkEnemy};
 use crate::player::Player;

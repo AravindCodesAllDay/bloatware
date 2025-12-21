@@ -1,6 +1,12 @@
 // ============================================================================
 // game.rs
-use bevy::prelude::*;
+use bevy::prelude::{
+    App, ButtonInput, Camera2d, Commands, Component, Entity, KeyCode, Plugin, Query, Res, ResMut,
+    Resource, Startup, Time, Transform, Update, Vec3, With, Without,
+};
+use crate::player::Player;
+use crate::projectile::Projectile;
+use crate::world::chunk::{ChunkEntity, WorldGen};
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum GameState {
@@ -44,8 +50,8 @@ fn setup_camera(mut commands: Commands) {
 }
 
 fn camera_follow(
-    player_query: Query<&Transform, With<crate::player::Player>>,
-    mut camera_query: Query<&mut Transform, (With<MainCamera>, Without<crate::player::Player>)>,
+    player_query: Query<&Transform, With<Player>>,
+    mut camera_query: Query<&mut Transform, (With<MainCamera>, Without<Player>)>,
     game: Res<Game>,
 ) {
     if game.state != GameState::Playing {
@@ -90,11 +96,11 @@ fn handle_state_transitions(
     mut commands: Commands,
     input: Res<ButtonInput<KeyCode>>,
     mut game: ResMut<Game>,
-    mut world_gen: ResMut<crate::world::chunk::WorldGen>,
+    mut world_gen: ResMut<WorldGen>,
     mut camera_query: Query<&mut Transform, With<MainCamera>>,
-    player_query: Query<Entity, With<crate::player::Player>>,
-    chunk_query: Query<Entity, With<crate::world::chunk::ChunkEntity>>,
-    projectile_query: Query<Entity, With<crate::projectile::Projectile>>,
+    player_query: Query<Entity, With<Player>>,
+    chunk_query: Query<Entity, With<ChunkEntity>>,
+    projectile_query: Query<Entity, With<Projectile>>,
 ) {
     if !input.just_pressed(KeyCode::Space) {
         return;
