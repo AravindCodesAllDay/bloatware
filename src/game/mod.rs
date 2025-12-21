@@ -4,7 +4,7 @@ use bevy::prelude::{
     App, ButtonInput, Camera2d, Commands, Component, Entity, KeyCode, Plugin, Query, Res, ResMut,
     Resource, Startup, Time, Transform, Update, Vec3, With, Without,
 };
-use crate::player::Player;
+use crate::player::{Player,spawn_player};
 use crate::projectile::Projectile;
 use crate::world::chunk::{ChunkEntity, WorldGen};
 
@@ -132,7 +132,7 @@ fn handle_state_transitions(
             }
 
             // ---- SPAWN PLAYER ----
-            crate::player::spawn_player(&mut commands);
+            spawn_player(&mut commands);
         }
         _ => {}
     }

@@ -1,6 +1,6 @@
 // ============================================================================
 // constants.rs
-use bevy::prelude::*;
+use bevy::prelude::{Color};
 
 pub const PLAYER_SPEED: f32 = 300.0;
 pub const ENEMY_SPEED: f32 = 180.0;
