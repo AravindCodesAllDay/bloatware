@@ -4,7 +4,7 @@ use bevy::prelude::*;
 use std::collections::{HashMap, HashSet};
 use rand::{Rng, SeedableRng};
 use rand::rngs::StdRng;
-use crate::constants::*;
+use crate::common::constants::*;
 use crate::game::{Game, GameState};
 
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]

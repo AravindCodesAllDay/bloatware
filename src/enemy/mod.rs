@@ -1,7 +1,7 @@
 // ============================================================================
 // enemy.rs
 use bevy::prelude::*;
-use crate::constants::*;
+use crate::common::constants::*;
 use crate::game::{Game, GameState};
 
 #[derive(Component)]
@@ -23,7 +23,7 @@ fn enemy_ai(
     time: Res<Time>,
     mut enemy_q: Query<(&Transform, &mut Enemy)>,
     player_q: Query<&Transform, With<crate::player::Player>>,
-    wall_q: Query<(&Transform, &Sprite), With<crate::chunk::ChunkWall>>,
+    wall_q: Query<(&Transform, &Sprite), With<crate::world::chunk::ChunkWall>>,
     game: Res<Game>,
 ) {
     if game.state != GameState::Playing {

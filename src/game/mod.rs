@@ -90,10 +90,10 @@ fn handle_state_transitions(
     mut commands: Commands,
     input: Res<ButtonInput<KeyCode>>,
     mut game: ResMut<Game>,
-    mut world_gen: ResMut<crate::chunk::WorldGen>,
+    mut world_gen: ResMut<crate::world::chunk::WorldGen>,
     mut camera_query: Query<&mut Transform, With<MainCamera>>,
     player_query: Query<Entity, With<crate::player::Player>>,
-    chunk_query: Query<Entity, With<crate::chunk::ChunkEntity>>,
+    chunk_query: Query<Entity, With<crate::world::chunk::ChunkEntity>>,
     projectile_query: Query<Entity, With<crate::projectile::Projectile>>,
 ) {
     if !input.just_pressed(KeyCode::Space) {

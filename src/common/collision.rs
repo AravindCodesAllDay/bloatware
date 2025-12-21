@@ -2,9 +2,9 @@
 // collision.rs
 use bevy::prelude::*;
 use crate::audio::GameAssets;
-use crate::constants::*;
+use crate::common::constants::*;
 use crate::game::{Game, GameState};
-use crate::chunk::{ChunkWall, ChunkEnemy};
+use crate::world::chunk::{ChunkWall, ChunkEnemy};
 use crate::player::Player;
 use crate::projectile::Projectile;
 use crate::enemy::Enemy;

@@ -2,7 +2,7 @@
 // player.rs
 use bevy::prelude::*;
 use crate::audio::GameAssets;
-use crate::constants::*;
+use crate::common::constants::*;
 use crate::game::{Game, GameState};
 
 #[derive(Component)]
