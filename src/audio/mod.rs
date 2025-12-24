@@ -1,7 +1,7 @@
 // ============================================================================
 // audio.rs
 use bevy::prelude::{
-    App, AssetServer, Commands, Handle, Plugin, Res, Resource, Startup, AudioSource,
+    App, AssetServer, AudioSource, Commands, Handle, Plugin, Res, Resource, Startup,
 };
 
 #[derive(Resource)]
@@ -22,9 +22,9 @@ impl Plugin for AudioPlugin {
 
 fn load_assets(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.insert_resource(GameAssets {
-        shoot: asset_server.load("shoot.ogg"),
-        dash: asset_server.load("dash.ogg"),
-        hit: asset_server.load("hit.ogg"),
-        step: asset_server.load("step.ogg"),
+        shoot: asset_server.load("audio/shoot.ogg"),
+        dash: asset_server.load("audio/dash.ogg"),
+        hit: asset_server.load("audio/hit.ogg"),
+        step: asset_server.load("audio/step.ogg"),
     });
 }
