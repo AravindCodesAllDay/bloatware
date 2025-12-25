@@ -1,0 +1,210 @@
+    Checking bloatware v0.1.0 (Z:\games\dev\bloatware)
+warning: unused import: `AssetServer`
+ --> src\enemy\mod.rs:8:10
+  |
+8 |     App, AssetServer, Component, Plugin, Query, Res, Sprite, Time, Transform, Update, Vec3, With,
+  |          ^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `ENEMY_COLOR` and `WALL_COLOR`
+ --> src\world\chunk.rs:4:57
+  |
+4 |     CHUNK_LOAD_RADIUS, CHUNK_SIZE, CHUNK_UNLOAD_BUFFER, ENEMY_COLOR, ENEMY_SIZE,
+  |                                                         ^^^^^^^^^^^
+5 |     MAX_ENEMIES_PER_CHUNK, MIN_ENEMIES_PER_CHUNK, TILE_SIZE, WALL_COLOR, WALL_DENSITY,
+  |                                                              ^^^^^^^^^^
+
+error[E0277]: the trait bound `bevy::prelude::Color: From<bevy::prelude::Vec2>` is not satisfied
+   --> src\common\debug.rs:71:13
+    |
+ 68 |         gizmos.rect_2d(
+    |                ------- required by a bound introduced by this call
+...
+ 71 |             Vec2::splat(PLAYER_SIZE),
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^ the trait `From<bevy::prelude::Vec2>` is not implemented for `bevy::prelude::Color`
+    |
+    = help: the following other types implement trait `From<T>`:
+              `bevy::prelude::Color` implements `From<bevy::prelude::Hsla>`
+              `bevy::prelude::Color` implements `From<bevy::prelude::Hsva>`
+              `bevy::prelude::Color` implements `From<bevy::prelude::Hwba>`
+              `bevy::prelude::Color` implements `From<bevy::prelude::Laba>`
+              `bevy::prelude::Color` implements `From<bevy::prelude::Lcha>`
+              `bevy::prelude::Color` implements `From<bevy::prelude::LinearRgba>`
+              `bevy::prelude::Color` implements `From<bevy::prelude::Oklaba>`
+              `bevy::prelude::Color` implements `From<bevy::prelude::Oklcha>`
+            and 2 others
+    = note: required for `bevy::prelude::Vec2` to implement `Into<bevy::prelude::Color>`
+note: required by a bound in `GizmoBuffer::<Config, Clear>::rect_2d`
+   --> C:\Users\aravi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bevy_gizmos-0.17.3\src\gizmos.rs:804:21
+    |
+800 |     pub fn rect_2d(
+    |            ------- required by a bound in this associated function
+...
+804 |         color: impl Into<Color>,
+    |                     ^^^^^^^^^^^ required by this bound in `GizmoBuffer::<Config, Clear>::rect_2d`
+
+error[E0061]: this method takes 3 arguments but 4 arguments were supplied
+   --> src\common\debug.rs:68:16
+    |
+ 68 |         gizmos.rect_2d(
+    |                ^^^^^^^
+ 69 |             transform.translation.xy(),
+ 70 |             0.0,
+    |             --- expected `Vec2`, found floating-point number
+ 71 |             Vec2::splat(PLAYER_SIZE),
+ 72 |             Color::srgb(0.0, 1.0, 0.0),
+    |             -------------------------- unexpected argument #4 of type `bevy::prelude::Color`
+    |
+note: method defined here
+   --> C:\Users\aravi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bevy_gizmos-0.17.3\src\gizmos.rs:800:12
+    |
+800 |     pub fn rect_2d(
+    |            ^^^^^^^
+help: remove the extra argument
+    |
+ 70 ~             /* bevy::prelude::Vec2 */,
+ 71 ~             Vec2::splat(PLAYER_SIZE),
+    |
+
+error[E0277]: the trait bound `bevy::prelude::Color: From<bevy::prelude::Vec2>` is not satisfied
+   --> src\common\debug.rs:81:13
+    |
+ 78 |         gizmos.rect_2d(
+    |                ------- required by a bound introduced by this call
+...
+ 81 |             Vec2::splat(ENEMY_SIZE),
+    |             ^^^^^^^^^^^^^^^^^^^^^^^ the trait `From<bevy::prelude::Vec2>` is not implemented for `bevy::prelude::Color`
+    |
+    = help: the following other types implement trait `From<T>`:
+              `bevy::prelude::Color` implements `From<bevy::prelude::Hsla>`
+              `bevy::prelude::Color` implements `From<bevy::prelude::Hsva>`
+              `bevy::prelude::Color` implements `From<bevy::prelude::Hwba>`
+              `bevy::prelude::Color` implements `From<bevy::prelude::Laba>`
+              `bevy::prelude::Color` implements `From<bevy::prelude::Lcha>`
+              `bevy::prelude::Color` implements `From<bevy::prelude::LinearRgba>`
+              `bevy::prelude::Color` implements `From<bevy::prelude::Oklaba>`
+              `bevy::prelude::Color` implements `From<bevy::prelude::Oklcha>`
+            and 2 others
+    = note: required for `bevy::prelude::Vec2` to implement `Into<bevy::prelude::Color>`
+note: required by a bound in `GizmoBuffer::<Config, Clear>::rect_2d`
+   --> C:\Users\aravi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bevy_gizmos-0.17.3\src\gizmos.rs:804:21
+    |
+800 |     pub fn rect_2d(
+    |            ------- required by a bound in this associated function
+...
+804 |         color: impl Into<Color>,
+    |                     ^^^^^^^^^^^ required by this bound in `GizmoBuffer::<Config, Clear>::rect_2d`
+
+error[E0061]: this method takes 3 arguments but 4 arguments were supplied
+   --> src\common\debug.rs:78:16
+    |
+ 78 |         gizmos.rect_2d(
+    |                ^^^^^^^
+ 79 |             transform.translation.xy(),
+ 80 |             0.0,
+    |             --- expected `Vec2`, found floating-point number
+ 81 |             Vec2::splat(ENEMY_SIZE),
+ 82 |             Color::srgb(1.0, 0.0, 0.0),
+    |             -------------------------- unexpected argument #4 of type `bevy::prelude::Color`
+    |
+note: method defined here
+   --> C:\Users\aravi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bevy_gizmos-0.17.3\src\gizmos.rs:800:12
+    |
+800 |     pub fn rect_2d(
+    |            ^^^^^^^
+help: remove the extra argument
+    |
+ 80 ~             /* bevy::prelude::Vec2 */,
+ 81 ~             Vec2::splat(ENEMY_SIZE),
+    |
+
+error[E0277]: the trait bound `bevy::prelude::Color: From<bevy::prelude::Vec2>` is not satisfied
+   --> src\common\debug.rs:91:13
+    |
+ 88 |         gizmos.rect_2d(
+    |                ------- required by a bound introduced by this call
+...
+ 91 |             Vec2::splat(TILE_SIZE),
+    |             ^^^^^^^^^^^^^^^^^^^^^^ the trait `From<bevy::prelude::Vec2>` is not implemented for `bevy::prelude::Color`
+    |
+    = help: the following other types implement trait `From<T>`:
+              `bevy::prelude::Color` implements `From<bevy::prelude::Hsla>`
+              `bevy::prelude::Color` implements `From<bevy::prelude::Hsva>`
+              `bevy::prelude::Color` implements `From<bevy::prelude::Hwba>`
+              `bevy::prelude::Color` implements `From<bevy::prelude::Laba>`
+              `bevy::prelude::Color` implements `From<bevy::prelude::Lcha>`
+              `bevy::prelude::Color` implements `From<bevy::prelude::LinearRgba>`
+              `bevy::prelude::Color` implements `From<bevy::prelude::Oklaba>`
+              `bevy::prelude::Color` implements `From<bevy::prelude::Oklcha>`
+            and 2 others
+    = note: required for `bevy::prelude::Vec2` to implement `Into<bevy::prelude::Color>`
+note: required by a bound in `GizmoBuffer::<Config, Clear>::rect_2d`
+   --> C:\Users\aravi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bevy_gizmos-0.17.3\src\gizmos.rs:804:21
+    |
+800 |     pub fn rect_2d(
+    |            ------- required by a bound in this associated function
+...
+804 |         color: impl Into<Color>,
+    |                     ^^^^^^^^^^^ required by this bound in `GizmoBuffer::<Config, Clear>::rect_2d`
+
+error[E0061]: this method takes 3 arguments but 4 arguments were supplied
+   --> src\common\debug.rs:88:16
+    |
+ 88 |         gizmos.rect_2d(
+    |                ^^^^^^^
+ 89 |             transform.translation.xy(),
+ 90 |             0.0,
+    |             --- expected `Vec2`, found floating-point number
+ 91 |             Vec2::splat(TILE_SIZE),
+ 92 |             Color::srgb(0.0, 0.0, 1.0),
+    |             -------------------------- unexpected argument #4 of type `bevy::prelude::Color`
+    |
+note: method defined here
+   --> C:\Users\aravi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bevy_gizmos-0.17.3\src\gizmos.rs:800:12
+    |
+800 |     pub fn rect_2d(
+    |            ^^^^^^^
+help: remove the extra argument
+    |
+ 90 ~             /* bevy::prelude::Vec2 */,
+ 91 ~             Vec2::splat(TILE_SIZE),
+    |
+
+error[E0599]: no method named `get_single` found for struct `bevy::prelude::Query<'world, 'state, D, F>` in the current scope
+   --> src\player\mod.rs:292:44
+    |
+292 |     let Ok(children) = player_parent_query.get_single() else {
+    |                                            ^^^^^^^^^^
+    |
+help: there is a method `single` with a similar name
+    |
+292 -     let Ok(children) = player_parent_query.get_single() else {
+292 +     let Ok(children) = player_parent_query.single() else {
+    |
+
+error[E0308]: mismatched types
+   --> src\player\mod.rs:411:9
+    |
+411 |     for &child in children.iter() {
+    |         ^^^^^^    --------------- this is an iterator with items of type `bevy::prelude::Entity`
+    |         |
+    |         expected `Entity`, found `&_`
+    |
+    = note: expected struct `bevy::prelude::Entity`
+            found reference `&_`
+
+warning: variable does not need to be mutable
+   --> src\game\mod.rs:109:5
+    |
+109 |     mut texture_atlas_layouts: ResMut<Assets<TextureAtlasLayout>>,
+    |     ----^^^^^^^^^^^^^^^^^^^^^
+    |     |
+    |     help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+Some errors have detailed explanations: E0061, E0277, E0308, E0599.
+For more information about an error, try `rustc --explain E0061`.
+warning: `bloatware` (bin "bloatware") generated 3 warnings
+error: could not compile `bloatware` (bin "bloatware") due to 8 previous errors; 3 warnings emitted

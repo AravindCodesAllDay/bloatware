@@ -1,0 +1,42 @@
+    Checking bloatware v0.1.0 (Z:\games\dev\bloatware)
+warning: unused import: `AssetServer`
+ --> src\enemy\mod.rs:8:10
+  |
+8 |     App, AssetServer, Component, Plugin, Query, Res, Sprite, Time, Transform, Update, Vec3, With,
+  |          ^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `ENEMY_COLOR` and `WALL_COLOR`
+ --> src\world\chunk.rs:4:57
+  |
+4 |     CHUNK_LOAD_RADIUS, CHUNK_SIZE, CHUNK_UNLOAD_BUFFER, ENEMY_COLOR, ENEMY_SIZE,
+  |                                                         ^^^^^^^^^^^
+5 |     MAX_ENEMIES_PER_CHUNK, MIN_ENEMIES_PER_CHUNK, TILE_SIZE, WALL_COLOR, WALL_DENSITY,
+  |                                                              ^^^^^^^^^^
+
+error[E0614]: type `bevy::prelude::Entity` cannot be dereferenced
+   --> src\player\mod.rs:360:91
+    |
+360 |         if let Ok((mut sprite, mut timer, mut visibility, layer)) = overlay_query.get_mut(*child) {
+    |                                                                                           ^^^^^^ can't be dereferenced
+
+error[E0614]: type `bevy::prelude::Entity` cannot be dereferenced
+   --> src\player\mod.rs:412:70
+    |
+412 |         if let Ok((mut sprite, layer)) = timer_overlay_query.get_mut(*child) {
+    |                                                                      ^^^^^^ can't be dereferenced
+
+warning: variable does not need to be mutable
+   --> src\game\mod.rs:109:5
+    |
+109 |     mut texture_atlas_layouts: ResMut<Assets<TextureAtlasLayout>>,
+    |     ----^^^^^^^^^^^^^^^^^^^^^
+    |     |
+    |     help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+For more information about this error, try `rustc --explain E0614`.
+warning: `bloatware` (bin "bloatware") generated 3 warnings
+error: could not compile `bloatware` (bin "bloatware") due to 2 previous errors; 3 warnings emitted

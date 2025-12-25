@@ -1,0 +1,84 @@
+    Checking bloatware v0.1.0 (Z:\games\dev\bloatware)
+error[E0425]: cannot find value `draw_collisions` in this scope
+  --> src\common\debug.rs:27:68
+   |
+27 |             .add_systems(Update, (toggle_debug, update_visibility, draw_collisions));
+   |                                                                    ^^^^^^^^^^^^^^^ not found in this scope
+
+warning: unused imports: `ENEMY_SIZE`, `PLAYER_SIZE`, and `TILE_SIZE`
+ --> src\common\debug.rs:1:32
+  |
+1 | use crate::common::constants::{ENEMY_SIZE, PLAYER_SIZE, TILE_SIZE};
+  |                                ^^^^^^^^^^  ^^^^^^^^^^^  ^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `crate::enemy::Enemy`
+ --> src\common\debug.rs:2:5
+  |
+2 | use crate::enemy::Enemy;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `crate::player::Player`
+ --> src\common\debug.rs:3:5
+  |
+3 | use crate::player::Player;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `crate::world::chunk::ChunkWall`
+ --> src\common\debug.rs:4:5
+  |
+4 | use crate::world::chunk::ChunkWall;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `AssetServer`
+ --> src\enemy\mod.rs:8:10
+  |
+8 |     App, AssetServer, Component, Plugin, Query, Res, Sprite, Time, Transform, Update, Vec3, With,
+  |          ^^^^^^^^^^^
+
+warning: unused imports: `ENEMY_COLOR` and `WALL_COLOR`
+ --> src\world\chunk.rs:4:57
+  |
+4 |     CHUNK_LOAD_RADIUS, CHUNK_SIZE, CHUNK_UNLOAD_BUFFER, ENEMY_COLOR, ENEMY_SIZE,
+  |                                                         ^^^^^^^^^^^
+5 |     MAX_ENEMIES_PER_CHUNK, MIN_ENEMIES_PER_CHUNK, TILE_SIZE, WALL_COLOR, WALL_DENSITY,
+  |                                                              ^^^^^^^^^^
+
+error[E0599]: no method named `get_single` found for struct `bevy::prelude::Query<'world, 'state, D, F>` in the current scope
+   --> src\player\mod.rs:292:44
+    |
+292 |     let Ok(children) = player_parent_query.get_single() else {
+    |                                            ^^^^^^^^^^
+    |
+help: there is a method `single` with a similar name
+    |
+292 -     let Ok(children) = player_parent_query.get_single() else {
+292 +     let Ok(children) = player_parent_query.single() else {
+    |
+
+error[E0308]: mismatched types
+   --> src\player\mod.rs:411:9
+    |
+411 |     for &child in children.iter() {
+    |         ^^^^^^    --------------- this is an iterator with items of type `bevy::prelude::Entity`
+    |         |
+    |         expected `Entity`, found `&_`
+    |
+    = note: expected struct `bevy::prelude::Entity`
+            found reference `&_`
+
+warning: variable does not need to be mutable
+   --> src\game\mod.rs:109:5
+    |
+109 |     mut texture_atlas_layouts: ResMut<Assets<TextureAtlasLayout>>,
+    |     ----^^^^^^^^^^^^^^^^^^^^^
+    |     |
+    |     help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+Some errors have detailed explanations: E0308, E0425, E0599.
+For more information about an error, try `rustc --explain E0308`.
+warning: `bloatware` (bin "bloatware") generated 7 warnings
+error: could not compile `bloatware` (bin "bloatware") due to 3 previous errors; 7 warnings emitted
