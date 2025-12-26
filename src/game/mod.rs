@@ -106,7 +106,7 @@ fn handle_state_transitions(
     chunk_query: Query<Entity, With<ChunkEntity>>,
     projectile_query: Query<Entity, With<Projectile>>,
     asset_server: Res<AssetServer>,
-    mut texture_atlas_layouts: ResMut<Assets<TextureAtlasLayout>>,
+    texture_atlas_layouts: ResMut<Assets<TextureAtlasLayout>>,
 ) {
     if !input.just_pressed(KeyCode::Space) {
         return;
